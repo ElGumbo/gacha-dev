@@ -1,0 +1,39 @@
+{
+  "name": "gacha-dev-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#config": "./src/config/index.ts",
+    "#controllers": "./src/controllers/index.ts",
+    "#db": "./src/db/index.ts",
+    "#middleware": "./src/middleware/index.ts",
+    "#models": "./src/models/index.ts",
+    "#routes": "./src/routes/index.ts",
+    "#schemas": "./src/schemas/index.ts",
+    "#utils": "./src/utils/index.ts"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file=.env.development.local src/app.ts",
+    "start": "node --env-file=.env.development.local src/app.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.2"
+  }
+}
