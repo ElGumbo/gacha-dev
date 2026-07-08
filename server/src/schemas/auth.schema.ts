@@ -7,7 +7,7 @@ const emailSchema = z
 
 const basePasswordSchema = z
   .string({ error: 'Password must be a string' })
-  .min(12, { error: 'Password must be at least 12 characters.' })
+  .min(8, { error: 'Password must be at least 8 characters.' })
   .max(512, { error: 'The length of this Password is excessive.' });
 
 export const registerSchema = z
