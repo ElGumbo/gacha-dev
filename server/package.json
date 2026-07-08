@@ -16,6 +16,7 @@
   "scripts": {
     "dev": "node --watch --env-file=.env.development.local src/app.ts",
     "start": "node --env-file=.env.development.local src/app.ts",
+    "seed": "node --env-file=.env.development.local src/seed/seed.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
