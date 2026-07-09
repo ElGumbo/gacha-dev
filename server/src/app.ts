@@ -2,7 +2,7 @@ import '#db';
 import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { authRoutes } from '#routes';
+import { authRoutes, bannerRoutes } from '#routes';
 import { errorHandler, notFoundHandler } from '#middleware';
 import { CLIENT_BASE_URL, PORT } from '#config';
 
@@ -18,7 +18,8 @@ app.use(
 
 app.use(express.json(), cookieParser());
 
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/banners', bannerRoutes);
 
 app.use('*splat', notFoundHandler);
 app.use(errorHandler);

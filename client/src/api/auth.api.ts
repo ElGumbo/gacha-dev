@@ -7,26 +7,26 @@ import type {
 } from '../types/auth.types';
 
 export async function registerRequest(payload: RegisterPayload) {
-  const { data } = await apiClient.post<AuthSuccessResponse>('/auth/register', payload);
+  const { data } = await apiClient.post<AuthSuccessResponse>('/api/auth/register', payload);
   return data;
 }
 
 export async function loginRequest(payload: LoginPayload) {
-  const { data } = await apiClient.post<AuthSuccessResponse>('/auth/login', payload);
+  const { data } = await apiClient.post<AuthSuccessResponse>('/api/auth/login', payload);
   return data;
 }
 
 export async function logoutRequest() {
-  const { data } = await apiClient.delete<{ message: string }>('/auth/logout');
+  const { data } = await apiClient.delete<{ message: string }>('/api/auth/logout');
   return data;
 }
 
 export async function refreshRequest() {
-  const { data } = await apiClient.post<AuthSuccessResponse>('/auth/refresh');
+  const { data } = await apiClient.post<AuthSuccessResponse>('/api/auth/refresh');
   return data;
 }
 
 export async function meRequest() {
-  const { data } = await apiClient.get<MeResponse>('/auth/me');
+  const { data } = await apiClient.get<MeResponse>('/api/auth/me');
   return data;
 }
