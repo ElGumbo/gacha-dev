@@ -11,6 +11,16 @@ const userCharacterSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Character',
       required: true
+    },
+    level: {
+      type: Number,
+      required: true,
+      default: 1
+    },
+    duplicatesPulled: {
+      type: Number,
+      required: true,
+      default: 0
     }
   },
   {
@@ -18,5 +28,7 @@ const userCharacterSchema = new Schema(
     versionKey: false
   }
 );
+
+userCharacterSchema.index({ user: 1, character: 1 }, { unique: true });
 
 export default model('UserCharacter', userCharacterSchema);
