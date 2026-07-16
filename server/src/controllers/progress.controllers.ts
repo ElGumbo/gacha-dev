@@ -1,5 +1,6 @@
 import type { RequestHandler } from 'express';
 import { UserProgress } from '#models';
+import { accrueEarnings } from '#utils';
 
 interface ProgressResponse {
   message: string;
@@ -25,11 +26,7 @@ export const getProgress: RequestHandler<unknown, ProgressResponse> = async (req
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    const elapsedSeconds = Math.max(0, (Date.now() - userProgress.lastActiveAt.getTime()) / 1000);
-    const offlineEarnings = elapsedSeconds * userProgress.cps;
-
-    userProgress.currency += offlineEarnings;
-    userProgress.lastActiveAt = new Date();
+    const offlineEarnings = accrueEarnings(userProgress);
     await userProgress.save();
 
     res.json({

@@ -1,7 +1,12 @@
 import mongoose from 'mongoose';
 import type { RequestHandler } from 'express';
 import { Banner, UserProgress, UserBannerState, UserCharacter, PullHistory } from '#models';
-import { weightedRandomPick, applyDuplicatePull, characterCpsContribution } from '#utils';
+import {
+  weightedRandomPick,
+  applyDuplicatePull,
+  characterCpsContribution,
+  accrueEarnings
+} from '#utils';
 
 interface PullResponse {
   message: string;
@@ -67,6 +72,7 @@ export const pull: RequestHandler<{ id: string }, PullResponse> = async (req, re
           { $setOnInsert: { user: userId } },
           { upsert: true, new: true, setDefaultsOnInsert: true, session }
         );
+        accrueEarnings(userProgress);
 
         if (userProgress.currency < banner.cost)
           throw new Error('Insufficient currency.', { cause: { status: 400 } });
