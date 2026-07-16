@@ -24,11 +24,80 @@ interface PullResponse {
   currency: number;
 }
 
+interface BannerDTO {
+  id: string;
+  name: string;
+  cost: number;
+  pityThreshold: number;
+  pool: {
+    character: { id: string; name: string; rarity: string; cps: number };
+    weight: number;
+    oddsPercent: number;
+  }[];
+}
+
+interface BannersListResponse {
+  message: string;
+  banners: BannerDTO[];
+}
+
 type PoolCharacter = {
   _id: mongoose.Types.ObjectId;
   name: string;
   rarity: string;
   cps: number;
+};
+
+type PopulatedBanner = {
+  _id: { toString(): string };
+  name: string;
+  cost: number;
+  pityThreshold: number;
+  pool: { character: PoolCharacter | null; weight: number }[];
+};
+
+type ValidatedBanner = Omit<PopulatedBanner, 'pool'> & {
+  pool: { character: PoolCharacter; weight: number }[];
+};
+
+function toBannerDTO(banner: ValidatedBanner): BannerDTO {
+  const totalWeight = banner.pool.reduce((sum, entry) => sum + entry.weight, 0);
+
+  return {
+    id: banner._id.toString(),
+    name: banner.name,
+    cost: banner.cost,
+    pityThreshold: banner.pityThreshold,
+    pool: banner.pool.map(entry => ({
+      character: {
+        id: entry.character._id.toString(),
+        name: entry.character.name,
+        rarity: entry.character.rarity,
+        cps: entry.character.cps
+      },
+      weight: entry.weight,
+      oddsPercent: totalWeight > 0 ? (entry.weight / totalWeight) * 100 : 0
+    }))
+  };
+}
+
+export const getBanners: RequestHandler<unknown, BannersListResponse> = async (req, res, next) => {
+  try {
+    const banners = (await Banner.find()
+      .populate('pool.character')
+      .lean()) as unknown as PopulatedBanner[];
+
+    if (banners.some(banner => banner.pool.length === 0))
+      throw new Error('Banner has no characters configured.', { cause: { status: 500 } });
+    if (banners.some(banner => banner.pool.some(entry => !entry.character)))
+      throw new Error('Banner pool references a deleted character.', { cause: { status: 500 } });
+
+    const validBanners = banners as ValidatedBanner[];
+
+    res.json({ message: 'Banners retrieved.', banners: validBanners.map(toBannerDTO) });
+  } catch (error) {
+    next(error instanceof Error ? error : new Error('Internal server error'));
+  }
 };
 
 const pullsInProgress = new Set<string>();
