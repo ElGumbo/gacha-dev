@@ -1,18 +1,21 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AuthContext } from './AuthContext';
-import { setAccessToken } from '../api/client';
-import { loginRequest, logoutRequest, meRequest, refreshRequest, registerRequest } from '../api/auth.api';
+import { refreshAccessToken, setAccessToken } from '../api/client';
+import { loginRequest, logoutRequest, meRequest, registerRequest } from '../api/auth.api';
 import type { LoginPayload, RegisterPayload, User } from '../types/auth.types';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const hasRestoredSession = useRef(false);
 
   useEffect(() => {
+    if (hasRestoredSession.current) return;
+    hasRestoredSession.current = true;
+
     async function restoreSession() {
       try {
-        const { accessToken } = await refreshRequest();
-        setAccessToken(accessToken);
+        await refreshAccessToken();
         const { user } = await meRequest();
         setUser(user);
       } catch {

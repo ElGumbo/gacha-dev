@@ -6,8 +6,6 @@ interface ProgressResponse {
   message: string;
   currency: number;
   cps: number;
-  lastActiveAt: Date;
-  offlineEarnings: number;
 }
 
 const progressUpdatesInProgress = new Set<string>();
@@ -26,15 +24,13 @@ export const getProgress: RequestHandler<unknown, ProgressResponse> = async (req
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    const offlineEarnings = accrueEarnings(userProgress);
+    accrueEarnings(userProgress);
     await userProgress.save();
 
     res.json({
       message: 'Progress retrieved.',
       currency: userProgress.currency,
-      cps: userProgress.cps,
-      lastActiveAt: userProgress.lastActiveAt,
-      offlineEarnings
+      cps: userProgress.cps
     });
   } catch (error) {
     next(error instanceof Error ? error : new Error('Internal server error'));
