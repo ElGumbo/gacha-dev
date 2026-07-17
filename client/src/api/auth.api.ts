@@ -21,11 +21,6 @@ export async function logoutRequest() {
   return data;
 }
 
-export async function refreshRequest() {
-  const { data } = await apiClient.post<AuthSuccessResponse>('/api/auth/refresh');
-  return data;
-}
-
 export async function meRequest() {
   const { data } = await apiClient.get<MeResponse>('/api/auth/me');
   return data;
