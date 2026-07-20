@@ -6,9 +6,10 @@ const TICK_INTERVAL_MS = 1000;
 interface CurrencyTickerProps {
   currency: number;
   cps: number;
+  className?: string;
 }
 
-export function CurrencyTicker({ currency, cps }: CurrencyTickerProps) {
+export function CurrencyTicker({ currency, cps, className }: CurrencyTickerProps) {
   const [displayedCurrency, setDisplayedCurrency] = useState(currency);
   const baseline = useRef({ currency, timestamp: 0 });
 
@@ -22,5 +23,5 @@ export function CurrencyTicker({ currency, cps }: CurrencyTickerProps) {
     return () => clearInterval(intervalId);
   }, [currency, cps]);
 
-  return <p className="text-3xl font-semibold text-gray-900">{formatCurrency(displayedCurrency)}</p>;
+  return <p className={className}>{formatCurrency(displayedCurrency)}</p>;
 }
