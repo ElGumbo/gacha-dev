@@ -3,6 +3,8 @@ import { AuthProvider } from './context/AuthProvider';
 import { GameProvider } from './context/GameProvider';
 import { Header } from './components/Header';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { AuthLayout } from './components/AuthLayout';
+import { DashboardLayout } from './components/DashboardLayout';
 import { useAuth } from './hooks/useAuth';
 import { HomePage } from './pages/Home/HomePage';
 import { LoginPage } from './pages/Login/LoginPage';
@@ -16,10 +18,14 @@ function AppShell() {
     <>
       <Header />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<HomePage />} />
+          <Route element={<DashboardLayout />}>
+            <Route path="/" element={<HomePage />} />
+          </Route>
           <Route path="/banners" element={<BannersPage />} />
         </Route>
       </Routes>
