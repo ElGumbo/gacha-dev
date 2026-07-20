@@ -7,28 +7,28 @@ export function BannersPage() {
 
   return (
     <div className="mx-auto mt-16 max-w-sm px-4 text-center">
-      <h1 className="text-2xl font-semibold text-gray-900">Banner</h1>
+      <h1 className="text-2xl font-bold text-terminal-50">Banner</h1>
 
       {isLoading ? (
-        <p className="mt-4 text-sm text-gray-600">Loading banner…</p>
+        <p className="mt-4 text-sm text-terminal-100">Loading banner…</p>
       ) : error || !banner ? (
-        <p className="mt-4 text-sm text-gray-600">Couldn't load the banner.</p>
+        <p className="mt-4 text-sm text-terminal-100">Couldn't load the banner.</p>
       ) : (
         <div className="mt-6 flex flex-col gap-4">
-          <div className="rounded-md border border-gray-200 px-4 py-3">
-            <p className="text-xs text-gray-500">{banner.name}</p>
-            <p className="text-lg font-medium text-gray-900">Cost: {formatCurrency(banner.cost)}</p>
+          <div className="rounded-xl border border-terminal-800 bg-terminal-900 px-4 py-3">
+            <p className="text-xs text-terminal-100">{banner.name}</p>
+            <p className="text-lg font-medium text-terminal-50">Cost: {formatCurrency(banner.cost)}</p>
           </div>
 
-          <div className="rounded-md border border-gray-200 px-4 py-3 text-left">
-            <p className="mb-2 text-xs text-gray-500">Pool</p>
+          <div className="rounded-xl border border-terminal-800 bg-terminal-900 px-4 py-3 text-left">
+            <p className="mb-2 text-xs text-terminal-100">Pool</p>
             <ul className="flex flex-col gap-1">
               {banner.pool.map(entry => (
-                <li key={entry.character.id} className="flex justify-between text-sm text-gray-900">
+                <li key={entry.character.id} className="flex justify-between text-sm text-terminal-50">
                   <span>
                     {entry.character.name} ({entry.character.rarity})
                   </span>
-                  <span>{entry.oddsPercent.toFixed(2)}%</span>
+                  <span className="text-terminal-100">{entry.oddsPercent.toFixed(2)}%</span>
                 </li>
               ))}
             </ul>
@@ -38,24 +38,24 @@ export function BannersPage() {
             type="button"
             onClick={() => pull()}
             disabled={isPulling}
-            className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+            className="rounded-lg bg-terminal-50 px-4 py-2 text-sm font-medium text-terminal-950 transition-colors hover:bg-terminal-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPulling ? 'Pulling…' : 'Pull'}
           </button>
 
-          {pullError && <p className="text-sm text-gray-600">Pull failed. Try again.</p>}
+          {pullError && <p className="text-sm text-danger">Pull failed. Try again.</p>}
 
           {pullResult && (
             <Modal onClose={clearPullResult}>
-              <p className="text-xs text-gray-500">Pull result</p>
-              <p className="text-lg font-medium text-gray-900">
+              <p className="text-xs text-terminal-100">Pull result</p>
+              <p className="text-lg font-medium text-terminal-50">
                 {pullResult.character.name} ({pullResult.character.rarity})
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-terminal-100">
                 Level {pullResult.character.level}
                 {pullResult.character.leveledUp ? ' (leveled up!)' : ''}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-terminal-100">
                 Pity: {pullResult.pityCounter} / {banner.pityThreshold}
               </p>
             </Modal>

@@ -29,3 +29,17 @@
   --color-currency: var(--color-rarity-lr);
   --color-danger: #f87171;
 }
+
+@layer base {
+  body {
+    @apply bg-terminal-950 text-terminal-50 font-mono;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-attachment: fixed;
+  }
+
+  button,
+  a {
+    cursor: pointer;
+  }
+}
