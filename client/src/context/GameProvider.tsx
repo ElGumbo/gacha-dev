@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { GameContext } from './GameContext';
 import { getProgressRequest } from '../api/progress.api';
 import { getBannersRequest } from '../api/banner.api';
+import { useEffectOnce } from '../hooks/useEffectOnce';
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrency] = useState(0);
@@ -9,28 +10,26 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [totalCharacters, setTotalCharacters] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-  const hasLoadedInitialData = useRef(false);
+
+  async function fetchProgress() {
+    const data = await getProgressRequest();
+    setCurrency(data.currency);
+    setCps(data.cps);
+  }
 
   async function refresh() {
     try {
-      const data = await getProgressRequest();
-      setCurrency(data.currency);
-      setCps(data.cps);
+      await fetchProgress();
       setError(false);
     } catch {
       setError(true);
     }
   }
 
-  useEffect(() => {
-    if (hasLoadedInitialData.current) return;
-    hasLoadedInitialData.current = true;
-
+  useEffectOnce(() => {
     async function loadInitialData() {
       try {
-        const [progress, { banners }] = await Promise.all([getProgressRequest(), getBannersRequest()]);
-        setCurrency(progress.currency);
-        setCps(progress.cps);
+        const [, { banners }] = await Promise.all([fetchProgress(), getBannersRequest()]);
         setTotalCharacters(banners[0]?.pool.length ?? 0);
         setError(false);
       } catch {
@@ -40,7 +39,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       }
     }
     loadInitialData();
-  }, []);
+  });
 
   return (
     <GameContext.Provider value={{ currency, cps, totalCharacters, isLoading, error, refresh }}>

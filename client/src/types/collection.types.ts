@@ -1,12 +1,8 @@
+import type { BannerCharacter } from './banner.types';
+
 export interface CollectionCharacter {
   id: string;
-  character: {
-    id: string;
-    name: string;
-    rarity: string;
-    cps: number;
-    effectiveCps: number;
-  };
+  character: BannerCharacter & { effectiveCps: number };
   level: number;
   duplicatesPulled: number;
   duplicatesPerLevel: number;

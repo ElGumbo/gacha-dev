@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { getBannersRequest, pullBannerRequest } from '../api/banner.api';
 import { useGame } from './useGame';
+import { useEffectOnce } from './useEffectOnce';
 import type { Banner, PullResult } from '../types/banner.types';
 
 interface PullOutcome {
@@ -16,13 +17,9 @@ export function useBanners() {
   const [isPulling, setIsPulling] = useState(false);
   const [pullError, setPullError] = useState(false);
   const [pullResult, setPullResult] = useState<PullOutcome | null>(null);
-  const hasLoadedBanner = useRef(false);
   const isPullingRef = useRef(false);
 
-  useEffect(() => {
-    if (hasLoadedBanner.current) return;
-    hasLoadedBanner.current = true;
-
+  useEffectOnce(() => {
     async function loadBanner() {
       try {
         const data = await getBannersRequest();
@@ -34,7 +31,7 @@ export function useBanners() {
       }
     }
     loadBanner();
-  }, []);
+  });
 
   async function pull() {
     if (!banner || isPullingRef.current) return;
