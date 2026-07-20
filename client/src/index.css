@@ -1,1 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Neutral scale — backgrounds, borders, text */
+  --color-terminal-50: #e2e4ec;
+  --color-terminal-100: #9ca3af;
+  --color-terminal-200: #6b7280;
+  --color-terminal-300: #525866;
+  --color-terminal-400: #374151;
+  --color-terminal-500: #2e3240;
+  --color-terminal-600: #252830;
+  --color-terminal-700: #1a1c22;
+  --color-terminal-800: #161820;
+  --color-terminal-900: #0d0e11;
+  --color-terminal-950: #0a0b0e;
+
+  /* Rarity tiers */
+  --color-rarity-r: #9ca3af;
+  --color-rarity-sr: #4ade80;
+  --color-rarity-ssr: #60a5fa;
+  --color-rarity-ur: #c084fc;
+  --color-rarity-lr: #fbbf24;
+
+  /* Semantic accents */
+  --color-brand: var(--color-rarity-ssr);
+  --color-success: var(--color-rarity-sr);
+  --color-currency: var(--color-rarity-lr);
+  --color-danger: #f87171;
+}
