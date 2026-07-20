@@ -1,6 +1,5 @@
 import { Navigate, Outlet } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
-import { GameProvider } from '../context/GameProvider';
 
 export function ProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -8,9 +7,5 @@ export function ProtectedRoute() {
   if (isLoading) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
-  return (
-    <GameProvider>
-      <Outlet />
-    </GameProvider>
-  );
+  return <Outlet />;
 }
