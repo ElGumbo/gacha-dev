@@ -63,7 +63,7 @@ export function HomePage() {
               <p className="mb-3 text-xs text-terminal-100">// roster [{characters.length}]</p>
               <CharacterGrid>
                 {characters.map(entry => (
-                  <CharacterCard key={entry.id} entry={entry} />
+                  <CharacterCard key={entry.id} character={entry.character} level={entry.level} />
                 ))}
               </CharacterGrid>
             </div>

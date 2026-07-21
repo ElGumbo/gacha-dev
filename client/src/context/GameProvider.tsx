@@ -7,6 +7,7 @@ import { useEffectOnce } from '../hooks/useEffectOnce';
 export function GameProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrency] = useState(0);
   const [cps, setCps] = useState(0);
+  const [pityCounter, setPityCounter] = useState(0);
   const [totalCharacters, setTotalCharacters] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -15,6 +16,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const data = await getProgressRequest();
     setCurrency(data.currency);
     setCps(data.cps);
+    setPityCounter(data.pityCounter);
   }
 
   async function refresh() {
@@ -42,7 +44,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
   });
 
   return (
-    <GameContext.Provider value={{ currency, cps, totalCharacters, isLoading, error, refresh }}>
+    <GameContext.Provider
+      value={{ currency, cps, pityCounter, totalCharacters, isLoading, error, refresh }}
+    >
       {children}
     </GameContext.Provider>
   );

@@ -3,6 +3,7 @@ import { createContext } from 'react';
 export interface GameContextValue {
   currency: number;
   cps: number;
+  pityCounter: number;
   totalCharacters: number;
   isLoading: boolean;
   error: boolean;

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import type { RequestHandler } from 'express';
-import { Banner, UserProgress, UserBannerState, UserCharacter, PullHistory } from '#models';
+import { Banner, UserProgress, UserCharacter, PullHistory } from '#models';
 import {
   weightedRandomPick,
   applyDuplicatePull,
@@ -19,6 +19,7 @@ interface PullResponse {
     effectiveCps: number;
     level: number;
     leveledUp: boolean;
+    isNew: boolean;
   };
   pityCounter: number;
   currency: number;
@@ -146,13 +147,7 @@ export const pull: RequestHandler<{ id: string }, PullResponse> = async (req, re
         if (userProgress.currency < banner.cost)
           throw new Error('Insufficient currency.', { cause: { status: 400 } });
 
-        const bannerState = await UserBannerState.findOneAndUpdate(
-          { user: userId, banner: banner._id },
-          { $setOnInsert: { user: userId, banner: banner._id } },
-          { upsert: true, new: true, setDefaultsOnInsert: true, session }
-        );
-
-        const pityTriggered = bannerState.pityCounter + 1 >= banner.pityThreshold;
+        const pityTriggered = userProgress.pityCounter + 1 >= banner.pityThreshold;
         const urPool = validPool.filter(entry => entry.character.rarity === 'UR');
 
         if (pityTriggered && urPool.length === 0)
@@ -164,12 +159,11 @@ export const pull: RequestHandler<{ id: string }, PullResponse> = async (req, re
           ? weightedRandomPick(urPool)
           : weightedRandomPick(validPool);
 
-        bannerState.pityCounter = character.rarity === 'UR' ? 0 : bannerState.pityCounter + 1;
-        await bannerState.save({ session });
+        userProgress.pityCounter = character.rarity === 'UR' ? 0 : userProgress.pityCounter + 1;
 
         userProgress.currency -= banner.cost;
 
-        // Atomic upsert (same idiom as UserProgress/UserBannerState above) so two concurrent
+        // Atomic upsert (same idiom as UserProgress above) so two concurrent
         // first-time pulls of the same character can't race a plain find-then-create into a
         // non-transient duplicate-key error against the (user, character) unique index.
         const upsertResult = await UserCharacter.findOneAndUpdate(
@@ -229,9 +223,10 @@ export const pull: RequestHandler<{ id: string }, PullResponse> = async (req, re
             cps: character.cps,
             effectiveCps: characterCpsContribution(character.cps, userCharacter.level),
             level: userCharacter.level,
-            leveledUp
+            leveledUp,
+            isNew: isNewCharacter
           },
-          pityCounter: bannerState.pityCounter,
+          pityCounter: userProgress.pityCounter,
           currency: userProgress.currency
         };
       });
