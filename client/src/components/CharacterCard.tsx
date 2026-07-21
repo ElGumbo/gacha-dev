@@ -33,7 +33,7 @@ export function CharacterCard({ character, level }: CharacterCardProps) {
           <span className={`text-xs font-medium ${rarity.text}`}>
             +{formatCurrency(character.effectiveCps)}/s
           </span>
-          <span className="rounded border border-terminal-700 bg-terminal-900 px-1 text-xs text-terminal-100">
+          <span className="rounded border border-terminal-600 bg-terminal-900 px-1 text-xs text-terminal-100">
             Lv.{level}
           </span>
         </div>

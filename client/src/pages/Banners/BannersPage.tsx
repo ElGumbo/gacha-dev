@@ -2,21 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useBanners } from '../../hooks/useBanners';
 import { useGame } from '../../hooks/useGame';
 import { formatCurrency } from '../../utils/format';
-import { RARITY_ORDER, rarityStyle } from '../../utils/rarity';
+import { RARITY_ORDER, rarityStyle, sumByRarity } from '../../utils/rarity';
 import { RarityBadge } from '../../components/RarityBadge';
 import { CharacterCard } from '../../components/CharacterCard';
-import type { BannerPoolEntry, PullResult } from '../../types/banner.types';
+import type { PullResult } from '../../types/banner.types';
 
 const PREVIEW_INTERVAL_MS = 10000;
 const PREVIEW_FADE_MS = 300;
-
-function ratesByRarity(pool: BannerPoolEntry[]) {
-  const rates: Record<string, number> = {};
-  for (const entry of pool) {
-    rates[entry.character.rarity] = (rates[entry.character.rarity] ?? 0) + entry.oddsPercent;
-  }
-  return rates;
-}
 
 function InfoPopover({
   availableRarities,
@@ -31,12 +23,12 @@ function InfoPopover({
     <div className="group relative">
       <button
         type="button"
-        className="flex h-5 w-5 items-center justify-center rounded-full border border-terminal-700 text-xs text-terminal-100 transition-colors hover:border-brand hover:text-brand"
+        className="flex h-5 w-5 items-center justify-center rounded-full border border-terminal-200 text-xs text-terminal-100 transition-colors hover:border-brand hover:text-brand"
         aria-label="Pull rates"
       >
         i
       </button>
-      <div className="pointer-events-none absolute right-0 bottom-full z-10 mb-2 w-52 rounded-xl border border-terminal-700 bg-terminal-900 p-3.5 opacity-0 shadow-2xl transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
+      <div className="pointer-events-none absolute right-0 bottom-full z-10 mb-2 w-52 rounded-xl border border-terminal-200 bg-terminal-900 p-3.5 opacity-0 shadow-2xl transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
         <p className="mb-2.5 text-[10px] text-terminal-100">// pull_rates</p>
         <ul className="flex flex-col gap-1.5">
           {availableRarities.map(rarity => {
@@ -46,7 +38,7 @@ function InfoPopover({
                 <span className="flex w-9 shrink-0 items-center">
                   <RarityBadge rarity={rarity} small />
                 </span>
-                <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-terminal-800">
+                <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-terminal-600">
                   <div className={`h-full rounded-full opacity-65 ${rarityStyle(rarity).bg}`} style={{ width: `${rate}%` }} />
                 </div>
                 <span className="w-10 shrink-0 text-right text-[10px] text-terminal-100">{rate.toFixed(2)}%</span>
@@ -54,7 +46,7 @@ function InfoPopover({
             );
           })}
         </ul>
-        <p className="mt-2.5 border-t border-terminal-800 pt-2.5 text-[10px] text-terminal-100">
+        <p className="mt-2.5 border-t border-terminal-200 pt-2.5 text-[10px] text-terminal-100">
           UR guaranteed at {pityThreshold} pulls
         </p>
       </div>
@@ -81,11 +73,11 @@ function PullResultModal({
       onClick={onClose}
     >
       <div className="w-full max-w-xs" onClick={event => event.stopPropagation()}>
-        <p className="mb-5 text-center text-xs text-terminal-400">// pull_result [1]</p>
+        <p className="mb-5 text-center text-xs text-terminal-100">// pull_result [1]</p>
 
         <div className="relative mx-auto w-40 animate-[fadeSlideUp_0.3s_ease]">
           {badgeLabel && (
-            <span className="absolute -top-2.5 right-2 z-10 rounded border border-terminal-600 bg-terminal-950 px-1.5 py-0.5 text-[9px] font-bold tracking-widest text-currency">
+            <span className="absolute -top-2.5 right-2 z-10 rounded border border-terminal-200 bg-terminal-950 px-1.5 py-0.5 text-[9px] font-bold tracking-widest text-currency">
               {badgeLabel}
             </span>
           )}
@@ -100,7 +92,7 @@ function PullResultModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-terminal-600 px-6 py-2 font-mono text-xs text-terminal-300 transition-colors hover:border-terminal-400 hover:text-terminal-100"
+            className="rounded-lg border border-terminal-200 px-6 py-2 font-mono text-xs text-terminal-100 transition-colors hover:border-terminal-50 hover:text-terminal-50"
           >
             close()
           </button>
@@ -121,8 +113,8 @@ export function BannersPage() {
   } = useGame();
   const [previewIndex, setPreviewIndex] = useState(0);
   const [fading, setFading] = useState(false);
-  const rates = useMemo(() => (banner ? ratesByRarity(banner.pool) : {}), [banner]);
-  const availableRarities = useMemo(() => RARITY_ORDER.filter(rarity => rarity in rates), [rates]);
+  const rates = useMemo(() => (banner ? sumByRarity(banner.pool, entry => entry.oddsPercent) : {}), [banner]);
+  const availableRarities = RARITY_ORDER.filter(rarity => rarity in rates);
 
   useEffect(() => {
     if (!banner || banner.pool.length < 2) return;
@@ -156,9 +148,9 @@ export function BannersPage() {
         <p className="text-center text-sm text-terminal-100">Couldn't load the banner.</p>
       ) : (
         <div className="space-y-4">
-          <div className="overflow-hidden rounded-xl border border-terminal-800 bg-terminal-900">
+          <div className="overflow-hidden rounded-xl border border-terminal-500 bg-terminal-900">
             <div className="grid items-stretch gap-6 p-5 md:grid-cols-[1.1fr_1fr] md:p-7">
-              <div className="rounded-lg border border-terminal-800 bg-terminal-950 p-5 font-mono text-xs">
+              <div className="rounded-lg border border-terminal-500 bg-terminal-950 p-5 font-mono text-xs">
                 <div className="mb-4 flex items-center gap-1.5">
                   <div className="h-2 w-2 rounded-full bg-danger/40" />
                   <div className="h-2 w-2 rounded-full bg-currency/40" />
@@ -211,14 +203,14 @@ export function BannersPage() {
                   <p className="mt-4 text-xs text-terminal-100">{banner.pool.length} characters in pool</p>
                 </div>
 
-                <div className="border-t border-terminal-800 pt-4">
+                <div className="border-t border-terminal-500 pt-4">
                   <div className="mb-1.5 flex justify-between">
                     <span className="text-[10px] text-terminal-100">UR pity</span>
                     <span className="text-[10px] text-rarity-ur">
                       {pityCounter} / {banner.pityThreshold}
                     </span>
                   </div>
-                  <div className="h-0.75 overflow-hidden rounded-full bg-terminal-950">
+                  <div className="h-0.75 overflow-hidden rounded-full bg-terminal-600">
                     <div
                       className="h-full rounded-full bg-rarity-ur opacity-75 transition-all duration-400"
                       style={{ width: `${(pityCounter / banner.pityThreshold) * 100}%` }}
@@ -232,7 +224,7 @@ export function BannersPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-terminal-800 bg-terminal-900 p-5">
+          <div className="rounded-xl border border-terminal-500 bg-terminal-900 p-5">
             <div className="mb-4 flex items-center justify-between">
               <span className="text-[10px] text-terminal-100">// gacha_pull()</span>
               <InfoPopover availableRarities={availableRarities} rates={rates} pityThreshold={banner.pityThreshold} />

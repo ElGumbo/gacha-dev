@@ -10,6 +10,7 @@ import { HomePage } from './pages/Home/HomePage';
 import { LoginPage } from './pages/Login/LoginPage';
 import { RegisterPage } from './pages/Register/RegisterPage';
 import { BannersPage } from './pages/Banners/BannersPage';
+import { CollectionPage } from './pages/Collection/CollectionPage';
 
 function AppShell() {
   const { isAuthenticated } = useAuth();
@@ -26,6 +27,7 @@ function AppShell() {
           <Route element={<DashboardLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/banners" element={<BannersPage />} />
+            <Route path="/collection" element={<CollectionPage />} />
           </Route>
         </Route>
       </Routes>

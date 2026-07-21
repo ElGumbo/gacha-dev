@@ -1,3 +1,7 @@
+interface RarityPoolEntry {
+  character: { rarity: string };
+}
+
 interface RarityStyle {
   text: string;
   bg: string;
@@ -55,4 +59,12 @@ export const RARITY_ORDER = Object.keys(RARITY_STYLES);
 
 export function rarityStyle(rarity: string): RarityStyle {
   return RARITY_STYLES[rarity] ?? RARITY_STYLES.R;
+}
+
+export function sumByRarity<T extends RarityPoolEntry>(entries: T[], value: (entry: T) => number): Record<string, number> {
+  const totals: Record<string, number> = {};
+  for (const entry of entries) {
+    totals[entry.character.rarity] = (totals[entry.character.rarity] ?? 0) + value(entry);
+  }
+  return totals;
 }
