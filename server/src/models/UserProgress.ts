@@ -18,6 +18,11 @@ const userProgressSchema = new Schema(
       required: true,
       default: 0
     },
+    pityCounter: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     lastActiveAt: {
       type: Date,
       default: Date.now

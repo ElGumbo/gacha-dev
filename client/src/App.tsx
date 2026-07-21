@@ -25,8 +25,8 @@ function AppShell() {
         <Route element={<ProtectedRoute />}>
           <Route element={<DashboardLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/banners" element={<BannersPage />} />
           </Route>
-          <Route path="/banners" element={<BannersPage />} />
         </Route>
       </Routes>
     </>

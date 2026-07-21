@@ -33,6 +33,7 @@ export interface PullResult {
   effectiveCps: number;
   level: number;
   leveledUp: boolean;
+  isNew: boolean;
 }
 
 export interface PullResponse {
