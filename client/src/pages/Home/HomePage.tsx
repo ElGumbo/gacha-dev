@@ -7,8 +7,9 @@ import { CharacterGrid } from '../../components/CharacterGrid';
 import { StatCard } from '../../components/StatCard';
 
 export function HomePage() {
-  const { currency, cps, totalCharacters, isLoading, error, refresh } = useGame();
+  const { currency, cps, charactersByRarity, isLoading, error, refresh } = useGame();
   const { characters, isLoading: isCollectionLoading, error: collectionError } = useCollection();
+  const totalCharacters = Object.values(charactersByRarity).reduce((sum, count) => sum + count, 0);
 
   return (
     <>
@@ -53,7 +54,7 @@ export function HomePage() {
           </div>
 
           {characters.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-terminal-800 p-14 text-center text-sm text-terminal-100">
+            <div className="rounded-xl border border-dashed border-terminal-200 p-14 text-center text-sm text-terminal-100">
               no characters yet
               <br />
               <span className="mt-1 block text-xs text-terminal-100">visit the banner to pull</span>

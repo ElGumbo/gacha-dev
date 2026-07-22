@@ -41,7 +41,7 @@ export function RegisterPage() {
               value={firstName}
               onChange={e => setFirstName(e.target.value)}
               required
-              className="rounded-lg border border-terminal-700 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
+              className="rounded-lg border border-terminal-200 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
             />
           </label>
 
@@ -52,7 +52,7 @@ export function RegisterPage() {
               value={lastName}
               onChange={e => setLastName(e.target.value)}
               required
-              className="rounded-lg border border-terminal-700 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
+              className="rounded-lg border border-terminal-200 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
             />
           </label>
         </div>
@@ -64,7 +64,7 @@ export function RegisterPage() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            className="rounded-lg border border-terminal-700 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
+            className="rounded-lg border border-terminal-200 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
           />
         </label>
 
@@ -75,7 +75,7 @@ export function RegisterPage() {
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
-            className="rounded-lg border border-terminal-700 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
+            className="rounded-lg border border-terminal-200 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
           />
         </label>
 
@@ -86,7 +86,7 @@ export function RegisterPage() {
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
             required
-            className="rounded-lg border border-terminal-700 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
+            className="rounded-lg border border-terminal-200 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
           />
         </label>
 

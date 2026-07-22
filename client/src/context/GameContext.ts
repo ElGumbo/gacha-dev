@@ -4,7 +4,7 @@ export interface GameContextValue {
   currency: number;
   cps: number;
   pityCounter: number;
-  totalCharacters: number;
+  charactersByRarity: Record<string, number>;
   isLoading: boolean;
   error: boolean;
   refresh: () => Promise<void>;

@@ -37,7 +37,7 @@ export function LoginPage() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            className="rounded-lg border border-terminal-700 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
+            className="rounded-lg border border-terminal-200 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
           />
         </label>
 
@@ -48,7 +48,7 @@ export function LoginPage() {
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
-            className="rounded-lg border border-terminal-700 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
+            className="rounded-lg border border-terminal-200 bg-terminal-900 px-3 py-2 text-sm text-terminal-50 focus:border-brand focus:outline-none"
           />
         </label>
 
